@@ -27,3 +27,4 @@ export function generateTimeSlots() {
 
 // Booking state (in-memory)
 export const bookings = {};
+// structure: key -> { password: string }

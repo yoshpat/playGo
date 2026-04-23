@@ -22,12 +22,23 @@ daySelect.addEventListener("change", (e) => {
 
 // Booking logic
 function toggleBooking(key) {
-  if (bookings[key]) {
-    delete bookings[key];
-  } else {
-    bookings[key] = true;
+  const existing = bookings[key];
+
+  const password = prompt("Set or enter password for this slot:");
+
+  // CASE 1: slot is EMPTY → book it
+  if (!existing) {
+    bookings[key] = { password };
+    updateGrid();
+    return;
   }
 
+  // CASE 2: slot is already booked → only owner can remove
+  if (existing.password == password) {
+    delete bookings[key];
+  } else {
+    alert("Wrong password ❌");
+  }
   updateGrid();
 }
 
