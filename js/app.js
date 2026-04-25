@@ -1,22 +1,41 @@
-import { DAYS, HAMMOCKS, generateTimeSlots, bookings } from "./data.js";
-import { renderDays, renderGrid } from "./ui.js";
+import { HAMMOCKS, generateTimeSlots, bookings, getUserName } from "./data.js";
+import { renderDate, renderGrid, renderWelcome } from "./ui.js";
 
-const daySelect = document.getElementById("daySelect");
+// todo: change to false before adding!!
+// jump over user name assign for easy develupment
+const easy_mode = false;
+
+const welcomeLable = document.getElementById("welcomeLable");
 const grid = document.getElementById("grid");
+const dateInput = document.getElementById("date");
 
+var user_name = "";
+var chosen_date = "";
+// jump over user name assign for easy develupment
+if(easy_mode)
+{
+  user_name = "יוגב";
+}
+else{
+  // get user name
+  user_name = getUserName();
+}
 const times = generateTimeSlots();
 
 // Init UI
-renderDays(daySelect, DAYS);
+renderWelcome(welcomeLable, user_name);
 
-let currentDay = DAYS[0];
+// init date
+chosen_date = renderDate(dateInput)
+
 
 // Render initial grid
 updateGrid();
 
+
 // Change day
-daySelect.addEventListener("change", (e) => {
-  currentDay = e.target.value;
+dateInput.addEventListener("change", (e) => {
+  chosen_date = e.target.value;
   updateGrid();
 });
 
@@ -24,16 +43,16 @@ daySelect.addEventListener("change", (e) => {
 function toggleBooking(key) {
   const existing = bookings[key];
 
-  const password = prompt("Set or enter password for this slot:");
+  const password = prompt("הכנס סיסמא:");
   if(password === "")
   {
-    alert("empty password ❌");
+    alert("סיסמא ריקה ❌");
     return;
   }
 
   // CASE 1: slot is EMPTY → book it
   if (!existing) {
-    bookings[key] = { password };
+    bookings[key] = { password: password, name: user_name };
     updateGrid();
     return;
   }
@@ -42,11 +61,12 @@ function toggleBooking(key) {
   if (existing.password === password) {
     delete bookings[key];
   } else {
-    alert("Wrong password ❌");
+    alert("סיסמא שגויה ❌");
+    alert(key);
   }
   updateGrid();
 }
 
 function updateGrid() {
-  renderGrid(grid, HAMMOCKS, times, currentDay, bookings, toggleBooking);
+  renderGrid(grid, HAMMOCKS, times, chosen_date, bookings, toggleBooking);
 }

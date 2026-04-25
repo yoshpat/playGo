@@ -1,7 +1,5 @@
 // Core configuration
 
-export const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
-
 export const HAMMOCKS = 12;
 
 // Generate time slots (16:00 → 22:00 every 30 min)
@@ -27,4 +25,16 @@ export function generateTimeSlots() {
 
 // Booking state (in-memory)
 export const bookings = {};
-// structure: key -> { password: string }
+// structure: key -> { password: string, name: string }
+
+// ask for user name, for future reports
+export function getUserName(){
+  do{
+    var user_name = prompt("הכנס שם:");
+    if(user_name == "")
+    {
+      alert("שם ריק ❌");
+    }
+  }while(user_name === "");
+  return user_name;
+}
